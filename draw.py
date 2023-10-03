@@ -10,10 +10,10 @@ from utils import *
 pygame.init()
 fps = 300
 fpsClock = pygame.time.Clock()
-width, height = 2560, 1920
+width, height = 1280, 960
 screen = pygame.display.set_mode((width, height))
-font = pygame.font.SysFont('Arial', 40)
-resFont = pygame.font.SysFont('Arial', 50)
+font = pygame.font.SysFont('Arial', 20)
+resFont = pygame.font.SysFont('Arial', 25)
 # Increase Dots Per inch so it looks sharper
 ctypes.windll.shcore.SetProcessDpiAwareness(True)
 
@@ -23,16 +23,16 @@ model = Network([])
 # Our Buttons will append themselves to this list
 objects = []
 # Initial color
-drawColor = [255, 255, 255]
+drawColor  = [255, 255, 255]
 shadeColor = [150, 150, 150]
 # Initial brush size
 brushSize = 18
 brushSizeSteps = 3
 # Drawing Area Size
-canvasSize = [488*2, 488*2]
+canvasSize = [488, 488]
 # Button Variables.
-buttonWidth = 120*2
-buttonHeight = 35*2
+buttonWidth  = 120
+buttonHeight = 35
 # Canvas
 canvas = pygame.Surface(canvasSize)
 canvas.fill((0, 0, 0))
@@ -49,8 +49,8 @@ class Button():
         self.onclickFunction = onclickFunction
         self.onePress = onePress
         self.fillColors = {
-            'normal': '#ffffff',
-            'hover': '#666666',
+            'normal' : '#ffffff',
+            'hover'  : '#666666',
             'pressed': '#333333',
         }
         self.buttonSurface = pygame.Surface((self.width, self.height))
@@ -115,11 +115,6 @@ def extract():
 def run(network):
     img = extract()
     output = network.forward_pass(img)
-    # print('Testing image:')
-    # for pair in enumerate(output):
-        # print('{}: {:.1f}%'.format(pair[0], pair[1]*100))
-    # print('This looks like', np.argmax(output))
-    # show_nn(img, network)
     global guesses
     guesses = output
     return output
@@ -143,14 +138,14 @@ def show_image(image):
 
 def show_nn(image, CNN):
     current_image = image[:,:,np.newaxis]/255.
-    CvL1_output = CNN.layers[0].forward_prop(current_image)
-    MPL1_output = CNN.layers[1].forward_prop(CvL1_output)
-    ReLu_output = CNN.layers[2].forward_prop(MPL1_output)
-    CvL2_output = CNN.layers[3].forward_prop(ReLu_output)
-    MPL2_output = CNN.layers[4].forward_prop(CvL2_output)
-    prediction  = CNN.layers[5].forward_prop(MPL2_output)
-    ncols = 6
-    fig, ax = plt.subplots(8, ncols)
+    CvL1_output   = CNN.layers[0].forward_prop(current_image)
+    MPL1_output   = CNN.layers[1].forward_prop(CvL1_output)
+    ReLu_output   = CNN.layers[2].forward_prop(MPL1_output)
+    CvL2_output   = CNN.layers[3].forward_prop(ReLu_output)
+    MPL2_output   = CNN.layers[4].forward_prop(CvL2_output)
+    prediction    = CNN.layers[5].forward_prop(MPL2_output)
+    ncols         = 6
+    fig, ax       = plt.subplots(8, ncols)
     # Image
     ax[0][ncols-1].imshow(current_image, cmap='gray', interpolation='nearest', vmin=0, vmax=1)
     # Convolutions
